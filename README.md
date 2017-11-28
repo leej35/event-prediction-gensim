@@ -60,8 +60,10 @@ class Word2Vec __init__ (line 436)
 
 
 ### Change code
-Followings are how we actually changed the code to facilitate contexts and a target event data
+Followings are how we actually changed the code to facilitate contexts and a target event data.
+
 All Word2Vec (which includes CBOW) of Gensim is in `gensim/models/word2vec.py` file. 
+
 On Github: <https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/models/word2vec.py>
 
 ### train_batch_cbow (line 178)
@@ -182,13 +184,11 @@ On Github: <https://github.com/RaRe-Technologies/gensim/blob/develop/gensim/mode
 
 
 
-### Modify the file and install Gensim with modified version
-You can clone the Gensim from Github and replace `gensim/models/word2vec.py` file with the one I attached with this document. 
+### (To run it) Modify the word2vec.py and install Gensim with modified version
+1. Clone the Gensim from Github `git clone https://github.com/RaRe-Technologies/gensim.git`
+2. Replace original `gensim/models/word2vec.py` file with `word2vec.py` in this repository. 
+3. (At terminal) Go to the root of the Gensim repository and install `python setup.py install --user`
 
-Then, you can install customized Gensim with follwing commands at terminal (at the root directory of Gensim you just downloaded):
-```
-python setup.py install --user
-```
 
 ### Train the model
 
