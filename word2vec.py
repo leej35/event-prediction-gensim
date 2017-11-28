@@ -4,6 +4,12 @@
 # Copyright (C) 2013 Radim Rehurek <me@radimrehurek.com>
 # Licensed under the GNU LGPL v2.1 - http://www.gnu.org/licenses/lgpl.html
 
+# ===========================================================================
+# Modified word2vec.py of Gensim for Discrete Event Prediction in Time Series 
+# Jeongmin Lee (jlee@cs.pitt.edu) / Nov 2017 
+# https://github.com/leej35/event-prediction-gensim
+# Base Gensim version : 3.1.0
+# ---------------------------------------------------------------------------
 
 """
 Produce word vectors with deep learning via word2vec's "skip-gram and CBOW models", using either
