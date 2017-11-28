@@ -1,13 +1,13 @@
-# Note on Tweaking Gensim's CBOW Implementation
+# Discrete Event Prediction in Time-Series with Gensim
 Jeongmin Lee (jlee@cs.pitt.edu) / Nov 28. 2017
 
 ## Overview
-This is brief note on how one can utilize Gensim's CBOW implementation for Discrete Event Prediction.
+This is a brief note on how one can utilize Gensim's CBOW implementation for Discrete Event Prediction.
 
 To utilize Gensim's CBOW for your own task, you need to tweak (perhaps) two parts: data feeding part and model training part.
 
 ## Tweak Data Feeding: Having  My (own) Sentence Class
-Data feeding in Gensim is done with its `sentence` class. Basically, training instance consists of sentences which is sequence of words. Gensim has its own sentence class that encapsulates sentences for tranining. 
+Data feeding in Gensim is done with its `sentence` class. Basically, training instance consists of sentences which are sequence of words. Gensim has its own sentence class that encapsulates sentences for training. 
 
 We can create our own sentence class that feeds our own training instances like this:
 ```
@@ -23,9 +23,9 @@ class MySentences(object):
             yield instance
 ```
 
-With MySentence class, you can create my_sentences object. We assume each alphabet represents an event type and single instance is a tuple consists of list of context events and a single target event. For example, an instance of (['a','b'], 'z') represents that two events ['a','b'] are context event (preceding event) of an event 'z'.
+With MySentence class, you can create the my_sentences object. We assume each alphabet represents an event type and single instance is a tuple consists of a list of context events and a single target event. For example, an instance of (['a','b'], 'z') represents that two events ['a','b'] are context event (preceding event) of an event 'z'.
 
-You might want to have your own elaborated data feed MySentences class that parses your time series data into list of list of these tuples. 
+You might want to have your own elaborated data feed MySentences class that parses your time series data into the list of list of these tuples. 
 
 ```
 data_as_list = [ (['a','b'], 'z'), (['a','b'], 'z'), (['a','b'], 'z'), (['a','b'], 'z'), (['a','b'], 'z'), (['a','b'], 'z'), (['a','b'], 'z'), (['a','b'], 'z'), (['a','b'], 'z'), (['a','b'], 'z'), (['a','b'], 'z'), (['e','f','g'], 'c'), (['e','f','h','i'], 'c')   ]
@@ -34,13 +34,13 @@ my_sentences = MySentences(data_as_list)
 
 
 ## Tweak Model Training Part
-Basically Gensim only supports processing its input as list of sentences that each consists of sequence of words. To facilitate our time-series instance that a tuple of context events and a target event, we need to change some part of Gensim's model training code. From now and on, we assume a sentence as a single train instance that consists of context events and a target event.
+Basically, Gensim only supports processing its input as a list of sentences that each consists of a sequence of words. To facilitate our time-series instance that a tuple of context events and a target event, we need to change some part of Gensim's model training code. From now and on, we assume a sentence as a single train instance that consists of context events and a target event.
 
-Gensim's word2vec provides two models: Skipgram and CBOW. For us, we only consider CBOW. 
+Gensim's word2vec provides two models: Skip-gram and CBOW. For us, we only consider CBOW. 
 
-On high level view, Gensim's CBOW is implemented two parts: building vocabulary and training. Building vocabulary is done within build_vocab() function. Within it, we need to change scan_vocab() function that decouples context events and target events among a sentence. 
+On high-level view, Gensim's CBOW has implemented in two parts: building vocabulary and training. Building vocabulary is done within build_vocab() function. Within it, we need to change scan_vocab() function that decouples context events and target events in a sentence. 
 
-On training side, train() will manage jobs and train_batch_cbow() is the function that opens a data instance (sentence) and call subroutine function train_cbow_pair() that gets target and context events pair. We need to change train_batch_cbow() to facilitate process pairs of contexts and a target event instead of sequence of words.
+On training side, train() will manage jobs and train_batch_cbow() is the function that opens a data instance (sentence) and call subroutine function train_cbow_pair() that gets target and context events pair. We need to change train_batch_cbow() to facilitate process pairs of contexts and a target event instead of the sequence of words.
 
 
 ```
